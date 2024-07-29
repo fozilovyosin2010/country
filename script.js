@@ -4,13 +4,14 @@ let root = document.querySelector(".root");
 
 let inpSearch = document.querySelector(".inpSearch");
 
-inpSearch.oninput = () => {
-  searchData(inpSearch.value.trim());
-};
+let viewModal = document.querySelector(".viewModal");
+let rootView = document.querySelector(".rootView");
 
-if (inpSearch.value.trim() == "") {
-  getData();
-}
+inpSearch.oninput = () => {
+  if (inpSearch.value.trim().length > 0) {
+    searchData(inpSearch.value.trim().toLowerCase());
+  }
+};
 
 async function searchData(name) {
   try {
@@ -21,8 +22,7 @@ async function searchData(name) {
     console.error(error);
   }
 }
-
-export async function getData() {
+async function getData() {
   try {
     let response = await fetch(api);
     let data = await response.json();
@@ -93,26 +93,22 @@ function get(data) {
       })`;
     }
 
-    let aView = document.createElement("a");
-    aView.href = "../html/view.html";
-    aView.className = "aView";
-
     let btnView = document.createElement("button");
     btnView.innerHTML =
       "<i class='bx bx-search-alt-2'></i><span>Learn more!</span>";
     btnView.classList.add("btnView");
-    btnView.setAttribute("formaction", "./html/view.html");
-    btnView.onclick = () => {
+    btnView.onclick = (event) => {
+      event.preventDefault();
+      viewModal.showModal();
       console.log(e.name.common);
     };
 
-    aView.append(btnView);
     b1Div1.append(nameC);
     block5.append(regionN, region);
     block4.append(currenciesN, currencies);
     block3.append(capitalN, capital);
     block2.append(cca2Name, cca2);
-    block1.append(b1Div1, aView);
+    block1.append(b1Div1, btnView);
     sec.append(block1, block2, block3, block4, block5);
     root.appendChild(sec);
   });
