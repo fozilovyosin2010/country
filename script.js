@@ -22,6 +22,17 @@ async function searchData(name) {
     console.error(error);
   }
 }
+
+async function getDataView(name) {
+  try {
+    let response = await fetch(`https://restcountries.com/v3.1/name/${name}`);
+    let data = await response.json();
+    getView(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function getData() {
   try {
     let response = await fetch(api);
@@ -33,6 +44,145 @@ async function getData() {
 }
 
 getData();
+
+function viewCountry() {
+  viewModal.showModal();
+}
+function getView(data) {
+  rootView.innerHTML = "";
+
+  let mainBlock = document.createElement("div");
+  mainBlock.className = "mainBlock";
+
+  let block1 = document.createElement("div");
+  block1.className = "block1";
+
+  let block2 = document.createElement("div");
+  block2.className = "block2";
+
+  let secX = document.createElement("div");
+  secX.className = "secX";
+
+  let h1 = document.createElement("h1");
+  h1.className = "h1";
+  h1.innerHTML = "Name";
+
+  let h2 = document.createElement("h1");
+  h2.className = "h2";
+  h2.innerHTML = "Languages";
+
+  let btnXview = document.createElement("button");
+  btnXview.className = "btnXview";
+  btnXview.innerHTML = "&times";
+  btnXview.onclick = () => {
+    viewModal.close();
+  };
+
+  let table1 = document.createElement("table");
+  table1.className = "table1";
+
+  let table2 = document.createElement("table");
+  table2.className = "table2";
+
+  secX.appendChild(btnXview);
+  block1.append(h1, table1);
+  block2.append(h2, table2);
+  mainBlock.append(block1, block2);
+  rootView.append(secX, mainBlock);
+
+  data.forEach((e) => {
+    let trCommon = document.createElement("tr");
+
+    let tdCommonN = document.createElement("td");
+
+    tdCommonN.innerHTML = `Country`;
+
+    let tdCommon = document.createElement("td");
+    tdCommon.innerHTML = e.name.common;
+
+    let trOffcial = document.createElement("tr");
+
+    let tdOffcialN = document.createElement("td");
+    tdOffcialN.innerHTML = `Official name`;
+
+    let tdOffcial = document.createElement("td");
+    tdOffcial.innerHTML = e.name.official;
+
+    let trCapital = document.createElement("tr");
+
+    let tdCapitalN = document.createElement("td");
+    tdCapitalN.innerHTML = `Capital`;
+
+    let tdCapital = document.createElement("td");
+    tdCapital.innerHTML = e.capital;
+
+    let trNativeName = document.createElement("tr");
+
+    let tdNativeNameN = document.createElement("td");
+    tdNativeNameN.innerHTML = `Native name`;
+
+    let tdNativeName = document.createElement("td");
+    // tdNativeName.innerHTML = e.name.nativeName;
+
+    if (e.name.nativeName) {
+      tdNativeName.innerHTML = Object.values(e.name.nativeName)[0].official;
+    }
+
+    //   e.translations,
+    //   e.region,
+    //   e.subregion,
+    //   e.timezones[0],
+    //   e.tld,
+    //   e.cca2,
+    //   e.ccn3,
+    //   e.cca3,
+    //   e.cioc,
+    //   e.independent,
+    //   e.status,
+    //   e.unMember,
+    //   e.currencies,
+    //   e.flags.png;
+
+    let trTranslation = document.createElement("tr");
+
+    let tdTranslationN = document.createElement("td");
+    tdTranslationN.innerHTML = "Translations";
+
+    let tdTranslation = document.createElement("td");
+    tdTranslation.innerHTML = "<i class='bx bx-chevrons-down'></i>";
+
+    let trNatLang = document.createElement("tr");
+
+    let tdNatLangN = document.createElement("td");
+    tdNatLangN.innerHTML = "Native Language(s)";
+
+    let tdNatLang = document.createElement("td");
+
+    if (e.languages) {
+      let a = Object.values(e.languages);
+      let b = "";
+      for (let i = 0; i < a.length; i++) {
+        if (i == a.length - 1) {
+          b += `${a[i]}`;
+        } else {
+          b += `${a[i]},  `;
+        }
+      }
+      b.split(" ");
+      tdNatLang.innerHTML = b;
+    }
+
+    trNatLang.append(tdNatLangN, tdNatLang);
+    table2.append(trNatLang);
+
+    trTranslation.append(tdTranslationN, tdTranslation);
+    table1.append(trCommon, trOffcial, trCapital, trNativeName, trTranslation);
+    trNativeName.append(tdNativeNameN, tdNativeName);
+    trCapital.append(tdCapitalN, tdCapital);
+    trOffcial.append(tdOffcialN, tdOffcial);
+    trCommon.append(tdCommonN, tdCommon);
+  });
+}
 
 function get(data) {
   root.innerHTML = "";
@@ -87,7 +237,6 @@ function get(data) {
     let nameC = document.createElement("h6");
 
     if (e.name.common && e.name.nativeName) {
-      // let a = Object.values(e.name.nativeName)[0].official;
       nameC.innerHTML = `${e.name.common}<br>(${
         Object.values(e.name.nativeName)[0].official
       })`;
@@ -99,10 +248,11 @@ function get(data) {
     btnView.classList.add("btnView");
     btnView.onclick = (event) => {
       event.preventDefault();
-      viewModal.showModal();
-      console.log(e.name.common);
-    };
+      getDataView(e.name.common);
 
+      viewCountry();
+    };
+    // console.log(e.flags.png);
     b1Div1.append(nameC);
     block5.append(regionN, region);
     block4.append(currenciesN, currencies);
