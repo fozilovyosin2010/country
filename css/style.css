@@ -184,7 +184,6 @@ tr {
 
 tr:hover {
   color: #fff;
-  font-weight: 600;
   background: #ddd;
 }
 
@@ -196,4 +195,22 @@ tr:hover {
   display: grid;
   grid-gap: 20px;
   grid-template-columns: repeat(2, 1fr);
+}
+
+.tdTranslation {
+  text-align: end;
+}
+
+.table1 .tdTranslationN {
+  position: relative;
+  /*display: flex;
+  justify-content: space-between; */
+}
+.table1 .tdTranslationN i {
+  position: absolute;
+  right: 10px;
+}
+
+.lang-clk {
+  display: none;
 }

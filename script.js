@@ -128,29 +128,18 @@ function getView(data) {
       tdNativeName.innerHTML = Object.values(e.name.nativeName)[0].official;
     }
 
-    //   e.translations,
-    //   e.region,
-    //   e.subregion,
-    //   e.timezones[0],
-    //   e.tld,
-    //   e.cca2,
-    //   e.ccn3,
-    //   e.cca3,
-    //   e.cioc,
-    //   e.independent,
-    //   e.status,
-    //   e.unMember,
-    //   e.currencies,
-    //   e.flags.png;
-
     let trTranslation = document.createElement("tr");
+    trTranslation.className = "trTranslation";
+
+    //translation
 
     let tdTranslationN = document.createElement("td");
-    tdTranslationN.innerHTML = "Translations";
+    tdTranslationN.innerHTML =
+      "<span>Translations</span> <i class='bx bx-chevrons-down'></i>";
+    tdTranslationN.colSpan = 2;
+    tdTranslationN.className = "tdTranslationN";
 
-    let tdTranslation = document.createElement("td");
-    tdTranslation.innerHTML = "<i class='bx bx-chevrons-down'></i>";
-
+    //Only native language
     let trNatLang = document.createElement("tr");
 
     let tdNatLangN = document.createElement("td");
@@ -159,28 +148,82 @@ function getView(data) {
     let tdNatLang = document.createElement("td");
 
     if (e.languages) {
-      let a = Object.values(e.languages);
-      let b = "";
-      for (let i = 0; i < a.length; i++) {
-        if (i == a.length - 1) {
-          b += `${a[i]}`;
-        } else {
-          b += `${a[i]},  `;
-        }
-      }
-      b.split(" ");
-      tdNatLang.innerHTML = b;
+      let a = Object.values(e.languages)[0];
+      tdNatLang.innerHTML = a;
     }
 
-    trNatLang.append(tdNatLangN, tdNatLang);
-    table2.append(trNatLang);
+    let trLangs = document.createElement("tr");
 
-    trTranslation.append(tdTranslationN, tdTranslation);
+    let tdLangs = document.createElement("td");
+    tdLangs.innerHTML = "Languages";
+    tdLangs.colSpan = 2;
+
+    trLangs.append(tdLangs);
+    trNatLang.append(tdNatLangN, tdNatLang);
+    table2.append(trNatLang, trLangs);
+
+    //Languages
+    if (e.languages) {
+      let a = Object.keys(e.languages);
+      let b = Object.values(e.languages);
+
+      for (let i = 0; i < a.length; i++) {
+        let tr = document.createElement("tr");
+
+        let td1 = document.createElement("td");
+        td1.innerHTML = a[i];
+
+        let td2 = document.createElement("td");
+        td2.innerHTML = b[i];
+
+        tr.append(td1, td2);
+        table2.append(tr);
+      }
+      a.map((e) => {
+        let td1 = document.createElement("td");
+        td1.innerHTML = e;
+      });
+
+      b.map((e) => {
+        let td2 = document.createElement("td");
+        td2.innerHTML = e;
+      });
+    }
+
     table1.append(trCommon, trOffcial, trCapital, trNativeName, trTranslation);
+    trTranslation.append(tdTranslationN);
     trNativeName.append(tdNativeNameN, tdNativeName);
     trCapital.append(tdCapitalN, tdCapital);
     trOffcial.append(tdOffcialN, tdOffcial);
     trCommon.append(tdCommonN, tdCommon);
+
+    let trC = [];
+    for (let i = 0; i < 25; i++) {
+      let tr = document.createElement("tr");
+
+      tr.className = "lang-clk";
+
+      let objN = Object.keys(e.translations)[i];
+
+      let tdN = document.createElement("td");
+      tdN.innerHTML = objN;
+
+      let obj = Object.values(e.translations)[i].common;
+
+      let td = document.createElement("td");
+      td.innerHTML = obj;
+
+      tr.append(tdN, td);
+      table1.append(tr);
+
+      trC.push(tr);
+
+      tdTranslationN.onclick = () => {
+        trC.map((e) => {
+          e.classList.toggle("lang-clk");
+        });
+      };
+    }
   });
 }
 
@@ -252,7 +295,6 @@ function get(data) {
 
       viewCountry();
     };
-    // console.log(e.flags.png);
     b1Div1.append(nameC);
     block5.append(regionN, region);
     block4.append(currenciesN, currencies);
