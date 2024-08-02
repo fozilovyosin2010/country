@@ -60,6 +60,12 @@ function getView(data) {
   let block2 = document.createElement("div");
   block2.className = "block2";
 
+  let block3 = document.createElement("div");
+  block3.className = "block3";
+
+  let block4 = document.createElement("div");
+  block4.className = "block4";
+
   let secX = document.createElement("div");
   secX.className = "secX";
 
@@ -68,29 +74,41 @@ function getView(data) {
   h1.innerHTML = "Name";
 
   let h2 = document.createElement("h1");
-  h2.className = "h2";
+  h2.className = "h1";
   h2.innerHTML = "Languages";
+
+  let h3 = document.createElement("h1");
+  h3.className = "h3";
+  h3.innerHTML = "Codes";
 
   let btnXview = document.createElement("button");
   btnXview.className = "btnXview";
   btnXview.innerHTML = "&times";
   btnXview.onclick = () => {
     viewModal.close();
+
+    rootView.innerHTML = "";
   };
 
   let table1 = document.createElement("table");
-  table1.className = "table1";
+  table1.className = "table1 tWidth";
 
   let table2 = document.createElement("table");
-  table2.className = "table2";
+  table2.className = "tWidth";
+
+  let table3 = document.createElement("table");
+  table3.className = "tWidth";
 
   secX.appendChild(btnXview);
   block1.append(h1, table1);
   block2.append(h2, table2);
-  mainBlock.append(block1, block2);
+  block4.append(h3, table3);
+  mainBlock.append(block1, block2, block3, block4);
   rootView.append(secX, mainBlock);
 
   data.forEach((e) => {
+    //TABLE1
+
     let trCommon = document.createElement("tr");
 
     let tdCommonN = document.createElement("td");
@@ -122,7 +140,6 @@ function getView(data) {
     tdNativeNameN.innerHTML = `Native name`;
 
     let tdNativeName = document.createElement("td");
-    // tdNativeName.innerHTML = e.name.nativeName;
 
     if (e.name.nativeName) {
       tdNativeName.innerHTML = Object.values(e.name.nativeName)[0].official;
@@ -162,6 +179,8 @@ function getView(data) {
     trNatLang.append(tdNatLangN, tdNatLang);
     table2.append(trNatLang, trLangs);
 
+    //TABLE 2
+
     //Languages
     if (e.languages) {
       let a = Object.keys(e.languages);
@@ -190,12 +209,20 @@ function getView(data) {
       });
     }
 
+    //for block3
+
+    let img = document.createElement("img");
+    img.src = e.flags.svg;
+
+    block3.append(img);
     table1.append(trCommon, trOffcial, trCapital, trNativeName, trTranslation);
     trTranslation.append(tdTranslationN);
     trNativeName.append(tdNativeNameN, tdNativeName);
     trCapital.append(tdCapitalN, tdCapital);
     trOffcial.append(tdOffcialN, tdOffcial);
     trCommon.append(tdCommonN, tdCommon);
+
+    //TRANSLATIONS AND LANGUAGES
 
     let trC = [];
     for (let i = 0; i < 25; i++) {
@@ -224,6 +251,46 @@ function getView(data) {
         });
       };
     }
+
+    //TABLE 3
+
+    let trCca2 = document.createElement("tr");
+
+    let tdCca2N = document.createElement("td");
+    tdCca2N.innerHTML = `cca2`;
+
+    let tdCca2 = document.createElement("td");
+    tdCca2.innerHTML = e.cca2;
+
+    let trccn3 = document.createElement("tr");
+
+    let tdccn3N = document.createElement("td");
+    tdccn3N.innerHTML = `ccn3`;
+
+    let tdccn3 = document.createElement("td");
+    tdccn3.innerHTML = e.ccn3;
+
+    let trcca3 = document.createElement("tr");
+
+    let tdcca3N = document.createElement("td");
+    tdcca3N.innerHTML = `cca3`;
+
+    let tdcca3 = document.createElement("td");
+    tdcca3.innerHTML = e.cca3;
+
+    let trcioc = document.createElement("tr");
+
+    let tdciocN = document.createElement("td");
+    tdciocN.innerHTML = `cioc`;
+
+    let tdcioc = document.createElement("td");
+    tdcioc.innerHTML = e.cioc;
+
+    trcioc.append(tdciocN, tdcioc);
+    trcca3.append(tdcca3N, tdcca3);
+    trccn3.append(tdccn3N, tdccn3);
+    trCca2.append(tdCca2N, tdCca2);
+    table3.append(trCca2, trccn3, trcca3, trcioc);
   });
 }
 

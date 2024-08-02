@@ -9,10 +9,6 @@ dialog {
   height: 80%;
 }
 
-.rootView {
-  margin: 10px 30px;
-}
-
 header {
   position: sticky;
   top: 0;
@@ -109,7 +105,13 @@ input {
   border-radius: 8px;
 }
 
+.viewModal {
+  width: 100%;
+  height: 100%;
+}
+
 .rootView {
+  margin: 10px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -188,13 +190,27 @@ tr:hover {
 }
 
 .h1 {
-  padding: 10px 0;
+  padding: 0 0 5px;
 }
 
 .mainBlock {
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: "a b c" "a d d" "a . .";
+}
+
+.block1 {
+  grid-area: a;
+}
+.block2 {
+  grid-area: b;
+}
+.block3 {
+  grid-area: c;
+}
+.block4 {
+  grid-area: d;
 }
 
 .tdTranslation {
@@ -213,4 +229,19 @@ tr:hover {
 
 .lang-clk {
   display: none;
+}
+
+.tWidth {
+  width: 100%;
+}
+
+.mainBlock div:nth-child(3) img {
+  width: 100%;
+  height: 300px;
+}
+
+@media screen and (max-width: 768px) {
+  .mainBlock {
+    grid-template-columns: 1;
+  }
 }
