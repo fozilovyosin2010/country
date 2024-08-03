@@ -8,7 +8,7 @@ let viewModal = document.querySelector(".viewModal");
 let rootView = document.querySelector(".rootView");
 
 inpSearch.oninput = () => {
-  if (inpSearch.value.trim().length > 0) {
+  if (inpSearch.value.trim() !== "") {
     searchData(inpSearch.value.trim().toLowerCase());
   }
 };
@@ -25,7 +25,9 @@ async function searchData(name) {
 
 async function getDataView(name) {
   try {
-    let response = await fetch(`https://restcountries.com/v3.1/name/${name}`);
+    let response = await fetch(
+      `https://restcountries.com/v3.1/name/${name}?fullText=true`
+    );
     let data = await response.json();
     getView(data);
   } catch (error) {
@@ -66,6 +68,9 @@ function getView(data) {
   let block4 = document.createElement("div");
   block4.className = "block4";
 
+  let block5 = document.createElement("div");
+  block5.className = "block5";
+
   let secX = document.createElement("div");
   secX.className = "secX";
 
@@ -80,6 +85,10 @@ function getView(data) {
   let h3 = document.createElement("h1");
   h3.className = "h3";
   h3.innerHTML = "Codes";
+
+  let h4 = document.createElement("h1");
+  h4.className = "h4";
+  h4.innerHTML = "Geographic";
 
   let btnXview = document.createElement("button");
   btnXview.className = "btnXview";
@@ -99,11 +108,16 @@ function getView(data) {
   let table3 = document.createElement("table");
   table3.className = "tWidth";
 
+  let table4 = document.createElement("table");
+  table4.className = "tWidth";
+
   secX.appendChild(btnXview);
   block1.append(h1, table1);
   block2.append(h2, table2);
   block4.append(h3, table3);
-  mainBlock.append(block1, block2, block3, block4);
+  block5.append(h4, table4);
+
+  mainBlock.append(block1, block2, block3, block4, block5);
   rootView.append(secX, mainBlock);
 
   data.forEach((e) => {
@@ -117,6 +131,14 @@ function getView(data) {
 
     let tdCommon = document.createElement("td");
     tdCommon.innerHTML = e.name.common;
+
+    let trAltSpel = document.createElement("tr");
+
+    let tdAltSpeln = document.createElement("td");
+    tdAltSpeln.innerHTML = "Alt spelling";
+
+    let tdAltSpel = document.createElement("td");
+    tdAltSpel.innerHTML = e.altSpellings[0];
 
     let trOffcial = document.createElement("tr");
 
@@ -156,19 +178,6 @@ function getView(data) {
     tdTranslationN.colSpan = 2;
     tdTranslationN.className = "tdTranslationN";
 
-    //Only native language
-    let trNatLang = document.createElement("tr");
-
-    let tdNatLangN = document.createElement("td");
-    tdNatLangN.innerHTML = "Native Language(s)";
-
-    let tdNatLang = document.createElement("td");
-
-    if (e.languages) {
-      let a = Object.values(e.languages)[0];
-      tdNatLang.innerHTML = a;
-    }
-
     let trLangs = document.createElement("tr");
 
     let tdLangs = document.createElement("td");
@@ -176,8 +185,7 @@ function getView(data) {
     tdLangs.colSpan = 2;
 
     trLangs.append(tdLangs);
-    trNatLang.append(tdNatLangN, tdNatLang);
-    table2.append(trNatLang, trLangs);
+    table2.append(trLangs);
 
     //TABLE 2
 
@@ -212,10 +220,17 @@ function getView(data) {
     //for block3
 
     let img = document.createElement("img");
-    img.src = e.flags.svg;
+    img.src = e.flags.png;
 
     block3.append(img);
-    table1.append(trCommon, trOffcial, trCapital, trNativeName, trTranslation);
+    table1.append(
+      trCommon,
+      trOffcial,
+      trCapital,
+      trNativeName,
+      trAltSpel,
+      trTranslation
+    );
     trTranslation.append(tdTranslationN);
     trNativeName.append(tdNativeNameN, tdNativeName);
     trCapital.append(tdCapitalN, tdCapital);
@@ -291,6 +306,90 @@ function getView(data) {
     trccn3.append(tdccn3N, tdccn3);
     trCca2.append(tdCca2N, tdCca2);
     table3.append(trCca2, trccn3, trcca3, trcioc);
+
+    //TABLE 4
+
+    let trRegion = document.createElement("tr");
+
+    let tdRegionN = document.createElement("td");
+    tdRegionN.innerHTML = "region";
+
+    let tdRegion = document.createElement("td");
+    tdRegion.innerHTML = e.region;
+
+    let trSubregion = document.createElement("tr");
+
+    let tdSubregionN = document.createElement("td");
+    tdSubregionN.innerHTML = "subregion";
+
+    let tdSubregion = document.createElement("td");
+    tdSubregion.innerHTML = e.subregion;
+
+    let trBorders = document.createElement("tr");
+
+    let tdBordersN = document.createElement("td");
+    tdBordersN.innerHTML = "border(s)";
+
+    let tdBorders = document.createElement("td");
+
+    if (!e.borders) {
+      tdBorders.innerHTML = "none";
+    } else if (e.borders) {
+      let a = Object.values(e.borders);
+      tdBorders.innerHTML = a.join(",  ");
+    }
+
+    let trArea = document.createElement("tr");
+
+    let tdAreaN = document.createElement("td");
+    tdAreaN.innerHTML = "Area";
+
+    let tdArea = document.createElement("td");
+    tdArea.innerHTML = `${e.area} km²`;
+
+    let trPopulation = document.createElement("tr");
+
+    let tdPopulationN = document.createElement("td");
+    tdPopulationN.innerHTML = "Population";
+
+    let tdPopulation = document.createElement("td");
+    // tdPopulation.innerHTML = `${e.population}`;
+    if (e.population >= 1000000) {
+      tdPopulation.innerHTML = `${(e.population / 1000000).toFixed(3)}M`;
+    } else if (e.population >= 1000) {
+      tdPopulation.innerHTML = `${(e.population / 1000).toFixed(3)}K`;
+    } else {
+      tdPopulation.innerHTML = e.population;
+    }
+
+    let trTimeZ = document.createElement("tr");
+
+    let tdTimeZN = document.createElement("td");
+    tdTimeZN.innerHTML = "Time zone";
+
+    let tdTimeZ = document.createElement("td");
+    tdTimeZ.innerHTML = e.timezones;
+
+    //this from table 1 only (trAltSpel)
+    trAltSpel.append(tdAltSpeln, tdAltSpel);
+
+    //table 4 append
+
+    trTimeZ.append(tdTimeZN, tdTimeZ);
+    trPopulation.append(tdPopulationN, tdPopulation);
+    trArea.append(tdAreaN, tdArea);
+    trBorders.append(tdBordersN, tdBorders);
+    trSubregion.append(tdSubregionN, tdSubregion);
+    trRegion.append(tdRegionN, tdRegion);
+    table4.append(
+      trCapital,
+      trRegion,
+      trSubregion,
+      trBorders,
+      trArea,
+      trPopulation,
+      trTimeZ
+    );
   });
 }
 
@@ -358,7 +457,7 @@ function get(data) {
     btnView.classList.add("btnView");
     btnView.onclick = (event) => {
       event.preventDefault();
-      getDataView(e.name.common);
+      getDataView(e.name.official);
 
       viewCountry();
     };

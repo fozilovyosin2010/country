@@ -15,12 +15,17 @@ header {
   padding: 10px;
   background: #fff;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 20px;
   align-items: center;
+  border-bottom: 2px solid blue;
 }
 
 input {
   width: 100%;
+}
+
+input {
   border-radius: 8px;
   outline: none;
   padding: 5px 12px;
@@ -40,10 +45,11 @@ input {
   flex-direction: column;
   border: 1px solid;
   width: 100%;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 .f {
+  border-radius: 8px 8px 0 0;
   background: #ddd;
 }
 
@@ -66,6 +72,12 @@ input {
   background: rgba(70, 70, 230, 0.55);
   color: #fff;
 }
+
+.sec:hover,
+.sec:hover .block {
+  border-color: rgba(70, 70, 230, 0.55);
+}
+
 .b1Div1 {
   display: flex;
   flex-direction: column;
@@ -111,7 +123,6 @@ input {
 }
 
 .rootView {
-  margin: 10px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -119,8 +130,15 @@ input {
 }
 
 .secX {
+  position: fixed;
+  top: 3px;
+  left: 10px;
+  right: 10px;
   display: flex;
   justify-content: end;
+  background: #fff;
+  z-index: 1;
+  border-bottom: 3px solid limegreen;
 }
 .secX button {
   font-size: 24px;
@@ -185,7 +203,6 @@ tr {
 }
 
 tr:hover {
-  color: #fff;
   background: #ddd;
 }
 
@@ -194,10 +211,12 @@ tr:hover {
 }
 
 .mainBlock {
+  padding-top: 20px;
   display: grid;
   grid-gap: 20px;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-areas: "a b c" "a d d" "a . .";
+  /* grid-template-areas: "a b d" ". e c" "a . ."; */
+  grid-template-areas: "a b c " "d e e";
 }
 
 .block1 {
@@ -211,6 +230,9 @@ tr:hover {
 }
 .block4 {
   grid-area: d;
+}
+.block5 {
+  grid-area: e;
 }
 
 .tdTranslation {
@@ -237,11 +259,19 @@ tr:hover {
 
 .mainBlock div:nth-child(3) img {
   width: 100%;
-  height: 300px;
+  /* height: 300x; */
+}
+
+tr td:first-child {
+  font-weight: bold;
 }
 
 @media screen and (max-width: 768px) {
+  .root {
+    grid-template-columns: repeat(1, 1fr);
+  }
   .mainBlock {
-    grid-template-columns: 1;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-areas: "a" "b" "d" "e" "c";
   }
 }
