@@ -3,6 +3,7 @@ let api = "https://restcountries.com/v3.1/all";
 let root = document.querySelector(".root");
 
 let inpSearch = document.querySelector(".inpSearch");
+let filter = document.querySelector(".filter");
 
 let viewModal = document.querySelector(".viewModal");
 let rootView = document.querySelector(".rootView");
@@ -10,6 +11,14 @@ let rootView = document.querySelector(".rootView");
 inpSearch.oninput = () => {
   if (inpSearch.value.trim() !== "") {
     searchData(inpSearch.value.trim().toLowerCase());
+  }
+};
+
+filter.onclick = () => {
+  if (filter.value == "all") {
+    getData();
+  } else {
+    getDataFilter(filter.value);
   }
 };
 
@@ -30,6 +39,18 @@ async function getDataView(name) {
     );
     let data = await response.json();
     getView(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function getDataFilter(region) {
+  try {
+    let response = await fetch(
+      `https://restcountries.com/v3.1/region/${region}`
+    );
+    let data = await response.json();
+    get(data);
   } catch (error) {
     console.error(error);
   }
@@ -392,7 +413,6 @@ function getView(data) {
     );
   });
 }
-
 function get(data) {
   root.innerHTML = "";
   data.forEach((e) => {

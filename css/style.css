@@ -25,7 +25,8 @@ input {
   width: 100%;
 }
 
-input {
+input,
+select {
   border-radius: 8px;
   outline: none;
   padding: 5px 12px;
@@ -33,10 +34,10 @@ input {
 }
 
 .root {
-  margin: 10px;
+  margin: 10px 20px 10px 10px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 50px;
+  grid-gap: 30px;
 }
 
 .sec {
